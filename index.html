@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>استبيان تفاعلي</title>
+    <title>Congrats!</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -24,6 +24,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: "Cairo", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+            text-decoration: none !important;
         }
 
         body {
@@ -225,12 +226,16 @@
             text-align: center;
 
         }
+
+        img {
+            width: 100%;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>استبيان تفضيلات المستخدم</h1>
+        <h1> Congrats ! </h1>
 
         <div class="progress-container">
             <div class="progress-bar">
@@ -245,35 +250,43 @@
 
         <div class="questions-container">
             <div class="question active" id="question1">
-                <div class="question-text">ما هو نوع الإجازة المفضل لديك؟</div>
+                <div class="question-text">What is your favorite type of vacation?</div>
                 <div class="options">
-                    <div class="option" data-value="beach">عطلة شاطئية</div>
-                    <div class="option" data-value="mountain">رحلة جبلية</div>
+                    <div class="option" data-value="beach">Yes</div>
+                    <div class="option" data-value="mountain">No</div>
                 </div>
             </div>
 
             <div class="question" id="question2">
-                <div class="question-text">كيف تفضل قضاء وقت فراغك؟</div>
+                <div class="question-text">What is your favorite type of vacation?</div>
                 <div class="options">
-                    <div class="option" data-value="reading">قراءة الكتب</div>
-                    <div class="option" data-value="sports">ممارسة الرياضة</div>
+                    <div class="option" data-value="reading">Yes</div>
+                    <div class="option" data-value="sports">No</div>
                 </div>
             </div>
 
             <div class="question" id="question3">
-                <div class="question-text">ما هو أسلوب التعلم المفضل لديك؟</div>
+                <div class="question-text">What is your favorite type of vacation?</div>
                 <div class="options">
-                    <div class="option" data-value="visual">بصري (مقاطع الفيديو، الرسوم البيانية)</div>
-                    <div class="option" data-value="auditory">سمعي (الاستماع، المناقشات)</div>
+                    <div class="option" data-value="visual">Yes</div>
+                    <div class="option" data-value="auditory">No</div>
                 </div>
             </div>
         </div>
 
         <div class="completion-message" id="completionMessage">
-            <i class="fas fa-check-circle"></i>
-            <h2>اكتمل الاستبيان!</h2>
-            <p>شكرا لمشاركة تفضيلاتك.</p>
-            <button class="results-button" id="resultsBtn">عرض النتائج</button>
+
+            <img src="./logo.png" alt="">
+
+            <h2>You have won the check today</h2>
+            <p>Congratulations! You have a 97% chance of winning. You are on the path to success. Please open and
+                refresh this page Click the 'Get My Check' button below, then complete the next questionnaire. We will
+                contact you shortly! Do not wait more than one minute</p>
+
+            <a href="https://www.google.com/">
+                <button class="results-button" id="resultsBtn">Get My Check</button>
+            </a>
+
         </div>
     </div>
 
