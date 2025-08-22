@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>استبيان تفاعلي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #6a11cb;
+            --secondary-color: #2575fc;
+            --accent-color: #ff6b6b;
+            --bg-color: rgba(255, 255, 255, 0.1);
+            --text-color: white;
+            --border-radius: 20px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Cairo", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80') no-repeat center center fixed;
+            background-size: cover;
+            padding: 20px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--bg-color);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 1;
+            color: var(--text-color);
+        }
+
+        .progress-container {
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: -20px;
+            position: relative;
+        }
+
+        .step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            position: relative;
+            z-index: 2;
+            transition: var(--transition);
+        }
+
+        .step.active {
+            background: var(--primary-color);
+            box-shadow: 0 0 15px rgba(106, 17, 203, 0.5);
+        }
+
+        .step.completed {
+            background: var(--secondary-color);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .question {
+            margin-bottom: 25px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            display: none;
+        }
+
+        .question.active {
+            opacity: 1;
+            transform: translateY(0);
+            display: block;
+        }
+
+        .question-text {
+            font-size: 22px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+        }
+
+        .option {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .option.selected {
+            background: rgba(106, 17, 203, 0.3);
+            border-color: var(--primary-color);
+        }
+
+        .completion-message {
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            display: none;
+        }
+
+        .completion-message.active {
+            opacity: 1;
+            transform: translateY(0);
+            display: block;
+        }
+
+        .completion-message i {
+            font-size: 60px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .completion-message h2 {
+            margin-bottom: 15px;
+        }
+
+        .results-button {
+            display: block;
+            margin: 30px auto 0;
+            padding: 15px 40px;
+            font-size: 18px;
+            background: linear-gradient(45deg, var(--accent-color), #ff8e53);
+            animation: pulse 2s infinite;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7);
+            }
+
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 15px rgba(255, 107, 107, 0);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(255, 107, 107, 0);
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>استبيان تفضيلات المستخدم</h1>
+
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div class="progress-steps">
+                <div class="step active">1</div>
+                <div class="step">2</div>
+                <div class="step">3</div>
+            </div>
+        </div>
+
+        <div class="questions-container">
+            <div class="question active" id="question1">
+                <div class="question-text">ما هو نوع الإجازة المفضل لديك؟</div>
+                <div class="options">
+                    <div class="option" data-value="beach">عطلة شاطئية</div>
+                    <div class="option" data-value="mountain">رحلة جبلية</div>
+                </div>
+            </div>
+
+            <div class="question" id="question2">
+                <div class="question-text">كيف تفضل قضاء وقت فراغك؟</div>
+                <div class="options">
+                    <div class="option" data-value="reading">قراءة الكتب</div>
+                    <div class="option" data-value="sports">ممارسة الرياضة</div>
+                </div>
+            </div>
+
+            <div class="question" id="question3">
+                <div class="question-text">ما هو أسلوب التعلم المفضل لديك؟</div>
+                <div class="options">
+                    <div class="option" data-value="visual">بصري (مقاطع الفيديو، الرسوم البيانية)</div>
+                    <div class="option" data-value="auditory">سمعي (الاستماع، المناقشات)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="completion-message" id="completionMessage">
+            <i class="fas fa-check-circle"></i>
+            <h2>اكتمل الاستبيان!</h2>
+            <p>شكرا لمشاركة تفضيلاتك.</p>
+            <button class="results-button" id="resultsBtn">عرض النتائج</button>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            const $questions = $('.question');
+            const $progress = $('#progress');
+            const $steps = $('.step');
+            const $completionMessage = $('#completionMessage');
+            const $questionsContainer = $('.questions-container');
+            const $progressContainer = $('.progress-container');
+
+            let currentQuestion = 0;
+            const totalQuestions = $questions.length;
+            const userAnswers = {};
+
+            function updateProgress() {
+                const progressPercent = (currentQuestion / totalQuestions) * 100;
+                $progress.css('width', `${progressPercent}%`);
+
+                $steps.each(function (index) {
+                    $(this).toggleClass('completed', index < currentQuestion)
+                        .toggleClass('active', index === currentQuestion);
+                });
+            }
+
+            function showQuestion(index) {
+                $questions.removeClass('active').eq(index).addClass('active');
+                updateProgress();
+            }
+
+            function moveToNextQuestion() {
+                if (currentQuestion < totalQuestions - 1) {
+                    currentQuestion++;
+                    showQuestion(currentQuestion);
+                } else {
+                    $questionsContainer.add($progressContainer).addClass('hidden');
+                    $completionMessage.addClass('active');
+                }
+            }
+
+            $('.option').on('click', function () {
+                const $this = $(this);
+                const $parentQuestion = $this.closest('.question');
+
+                $parentQuestion.find('.option').removeClass('selected');
+                $this.addClass('selected');
+
+                const questionId = $parentQuestion.attr('id');
+                userAnswers[questionId] = $this.data('value');
+
+                setTimeout(moveToNextQuestion, 500);
+            });
+
+            $('#resultsBtn').on('click', function () {
+                alert('نتائج الاستبيان: ' + JSON.stringify(userAnswers));
+            });
+
+            updateProgress();
+        });
+    </script>
+</body>
+
+</html>
