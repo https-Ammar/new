@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
-        /*  */
         :root {
             --primary-color: #6a11cb;
             --secondary-color: #2575fc;
@@ -31,6 +30,7 @@
         body {
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80') no-repeat center center fixed;
@@ -48,6 +48,21 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.6);
             z-index: 0;
+        }
+
+        .logo-container {
+            margin-bottom: 20px;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .logo-container img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
         .container {
@@ -112,11 +127,15 @@
             background: var(--secondary-color);
         }
 
-        h1 {
+        .title-container {
             text-align: center;
             margin-bottom: 30px;
+        }
+
+        h1 {
             font-weight: 600;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            transition: var(--transition);
         }
 
         .question {
@@ -177,10 +196,11 @@
             display: block;
         }
 
-        .completion-message i {
+        .checkmark {
             font-size: 60px;
-            color: var(--primary-color);
+            color: #4CAF50;
             margin-bottom: 20px;
+            display: block;
         }
 
         .completion-message h2 {
@@ -223,20 +243,37 @@
         }
 
         * {
-
             text-align: center;
+        }
 
+        .img_cover {
+            z-index: 9999999;
+
+            padding: 25px;
         }
 
         img {
-            width: 100%;
+            width: 200px;
+        }
+
+        i.fas.fa-check-circle {
+            font-size: 60px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
         }
     </style>
+
 </head>
 
 <body>
+    <div class="img_cover">
+        <img src="./logo.png" alt="Prize Logo">
+    </div>
+
     <div class="container">
-        <h1> Congrats ! </h1>
+        <div class="title-container" id="titleContainer">
+            <h1>Congrats!</h1>
+        </div>
 
         <div class="progress-container">
             <div class="progress-bar">
@@ -276,10 +313,8 @@
         </div>
 
         <div class="completion-message" id="completionMessage">
-
-            <img src="./logo.png" alt="">
-
-            <h2>You have won the check today</h2>
+            <i class="fas fa-check-circle"></i>
+            <h2>You have won the check today!</h2>
             <p>Congratulations! You have a 97% chance of winning. You are on the path to success. Please open and
                 refresh this page Click the 'Get My Check' button below, then complete the next questionnaire. We will
                 contact you shortly! Do not wait more than one minute</p>
@@ -287,9 +322,9 @@
             <a href="https://www.google.com/">
                 <button class="results-button" id="resultsBtn">Get My Check</button>
             </a>
-
         </div>
     </div>
+
     <script>
         $(document).ready(function () {
             const $questions = $('.question');
@@ -298,6 +333,7 @@
             const $completionMessage = $('#completionMessage');
             const $questionsContainer = $('.questions-container');
             const $progressContainer = $('.progress-container');
+            const $titleContainer = $('#titleContainer');
 
             let currentQuestion = 0;
             const totalQuestions = $questions.length;
@@ -323,6 +359,7 @@
                     showQuestion(currentQuestion);
                 } else {
                     $questionsContainer.add($progressContainer).addClass('hidden');
+                    $titleContainer.addClass('hidden');
                     $completionMessage.addClass('active');
                 }
             }
@@ -340,7 +377,6 @@
             updateProgress();
         });
     </script>
-
 </body>
 
 </html>
